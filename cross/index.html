@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>8-Word Crossword</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+
+    .puzzle-container {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(13, 38px);
+      grid-gap: 2px;
+      background: #444;
+      padding: 2px;
+      border-radius: 6px;
+    }
+
+    .cell {
+      width: 38px;
+      height: 38px;
+      background: white;
+      border: 1px solid #999;
+      font-size: 22px;
+      text-align: center;
+      text-transform: uppercase;
+      position: relative;
+      box-sizing: border-box;
+    }
+
+    .cell.black {
+      background: #333;
+      border-color: #333;
+      cursor: default;
+    }
+
+    .cell input {
+      width: 100%;
+      height: 100%;
+      border: none;
+      font-size: 22px;
+      text-align: center;
+      text-transform: uppercase;
+      background: transparent;
+      outline: none;
+    }
+
+    .cell input.correct {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .cell input.wrong {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .number {
+      position: absolute;
+      top: 1px;
+      left: 3px;
+      font-size: 11px;
+      font-weight: bold;
+      color: #444;
+      pointer-events: none;
+    }
+
+    .clues {
+      max-width: 420px;
+    }
+
+    .clues h2 {
+      margin: 20px 0 8px;
+      color: #2c3e50;
+    }
+
+    .clues ol {
+      padding-left: 22px;
+      line-height: 1.5;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 28px;
+      font-size: 16px;
+      background: #3498db;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #2980b9;
+    }
+  </style>
+</head>
+<body>
+
+<h1>8-Word Crossword</h1>
+
+<div class="puzzle-container">
+
+  <div class="grid" id="grid"></div>
+
+  <div class="clues">
+    <h2>Across</h2>
+    <ol>
+      <li>1.   Programming language named after a snake</li>
+      <li>3.   "To be or ___ to be"</li>
+      <li>5.   Capital of France</li>
+      <li>7.   Largest planet in our solar system</li>
+    </ol>
+
+    <h2>Down</h2>
+    <ol start="2">
+      <li>2.   Opposite of "light"</li>
+      <li>4.   Famous painting: Mona ___</li>
+      <li>6.   Country with kangaroos</li>
+      <li>8.   First man on the Moon (surname)</li>
+    </ol>
+  </div>
+
+</div>
+
+<button onclick="checkAnswers()">Check Answers</button>
+
+<script>
+const GRID_SIZE = 13;
+const gridData = [
+  // 0 1 2 3 4 5 6 7 8 9 10 11 12
+  ['P','Y','T','H','O','N','.','.','.','.','.','.','.'], // 1 across
+  ['.','.','.','.','.','.','D','.','.','.','.','.','.'],
+  ['.','.','.','.','.','.','A','.','.','.','.','.','.'],
+  ['.','.','.','.','.','.','R','.','.','.','.','.','.'],
+  ['.','.','P','A','R','I','S','.','.','.','.','.','.'], // 5 across
+  ['.','.','.','.','.','.','K','.','.','.','.','.','.'],
+  ['.','.','.','.','.','.','.','.','.','.','.','.','.'],
+  ['J','U','P','I','T','E','R','.','.','.','.','.','.'], // 7 across
+  ['.','.','.','.','.','.','.','.','.','.','.','.','.'],
+  ['.','.','.','.','.','.','.','.','.','.','.','.','.'],
+  ['.','.','.','.','.','.','.','.','.','.','.','.','.'],
+  ['.','.','.','.','.','.','.','.','.','.','.','.','.'],
+  ['.','.','.','.','.','.','.','.','.','.','.','.','.']
+];
+
+// Better to store answers separately (for checking)
+const answers = {
+  1: "PYTHON",     // across row 0
+  3: "NOT",        // across row 2 col 6-8
+  5: "PARIS",      // across row 4 col 2-6
+  7: "JUPITER",    // across row 7 col 0-6
+  
+  2: "DARK",       // down col 6 row 1-4
+  4: "LISA",       // down col 3 row 4-7
+  6: "AUSTRALIA",  // down col 6 row 4-12 (but we use 8 letters)
+  8: "ARMSTRONG"   // down col 0 row 7-14 (but we use 8 letters)
+};
+
+const startPositions = {
+  1: {row:0, col:0, dir:"across", length:6},
+  2: {row:1, col:6, dir:"down",   length:4},
+  3: {row:2, col:6, dir:"across", length:3},
+  4: {row:4, col:3, dir:"down",   length:4},
+  5: {row:4, col:2, dir:"across", length:5},
+  6: {row:4, col:6, dir:"down",   length:8},
+  7: {row:7, col:0, dir:"across", length:7},
+  8: {row:7, col:0, dir:"down",   length:8}   // we stop at 8 letters
+};
+
+function createGrid() {
+  const gridEl = document.getElementById("grid");
+  gridEl.innerHTML = "";
+
+  for (let r = 0; r < GRID_SIZE; r++) {
+    for (let c = 0; c < GRID_SIZE; c++) {
+      const cell = document.createElement("div");
+      cell.classList.add("cell");
+
+      if (gridData[r][c] === '.') {
+        cell.classList.add("black");
+      } else {
+        const input = document.createElement("input");
+        input.maxLength = 1;
+        input.dataset.row = r;
+        input.dataset.col = c;
+        input.addEventListener("input", handleInput);
+        input.addEventListener("keydown", handleKeyNavigation);
+        cell.appendChild(input);
+
+        // Add clue numbers
+        const pos = Object.entries(startPositions).find(([_,v]) => 
+          v.row === r && v.col === c
+        );
+        if (pos) {
+          const num = document.createElement("span");
+          num.className = "number";
+          num.textContent = pos[0];
+          cell.appendChild(num);
+        }
+      }
+
+      gridEl.appendChild(cell);
+    }
+  }
+}
+
+function handleInput(e) {
+  const input = e.target;
+  const val = input.value.toUpperCase();
+  input.value = val;
+
+  // Auto-move to next cell (simple version)
+  if (val.length === 1) {
+    const r = +input.dataset.row;
+    const c = +input.dataset.col;
+    const next = findNextCell(r, c);
+    if (next) next.focus();
+  }
+}
+
+function findNextCell(r, c) {
+  // Very basic — try right then down
+  const inputs = document.querySelectorAll(".cell:not(.black) input");
+  const current = document.querySelector(`input[data-row="${r}"][data-col="${c}"]`);
+  const idx = Array.from(inputs).indexOf(current);
+  return inputs[idx + 1] || null;
+}
+
+function handleKeyNavigation(e) {
+  const input = e.target;
+  const r = +input.dataset.row;
+  const c = +input.dataset.col;
+
+  let nextInput = null;
+
+  switch(e.key) {
+    case "ArrowRight": nextInput = getInput(r, c+1); break;
+    case "ArrowLeft":  nextInput = getInput(r, c-1); break;
+    case "ArrowDown":  nextInput = getInput(r+1, c); break;
+    case "ArrowUp":    nextInput = getInput(r-1, c); break;
+    case "Backspace":
+      if (input.value === "") {
+        nextInput = getInput(r, c-1) || getInput(r-1, c);
+      }
+      break;
+  }
+
+  if (nextInput) {
+    e.preventDefault();
+    nextInput.focus();
+  }
+}
+
+function getInput(r, c) {
+  if (r < 0 || r >= GRID_SIZE || c < 0 || c >= GRID_SIZE) return null;
+  return document.querySelector(`input[data-row="${r}"][data-col="${c}"]`);
+}
+
+function checkAnswers() {
+  let correctCount = 0;
+  let total = 0;
+
+  for (let r = 0; r < GRID_SIZE; r++) {
+    for (let c = 0; c < GRID_SIZE; c++) {
+      const input = getInput(r, c);
+      if (!input) continue;
+
+      const expected = gridData[r][c];
+      if (expected === '.') continue;
+
+      total++;
+      input.classList.remove("correct", "wrong");
+
+      if (input.value.toUpperCase() === expected) {
+        input.classList.add("correct");
+        correctCount++;
+      } else if (input.value !== "") {
+        input.classList.add("wrong");
+      }
+    }
+  }
+
+  alert(`Score: ${correctCount} / ${total}\n${correctCount === total ? "Perfect! 🎉" : "Keep trying!"}`);
+}
+
+// Initialize
+createGrid();
+</script>
+
+</body>
+</html>
