@@ -16,105 +16,110 @@
       padding: 20px;
     }
 
-    .container {
-      background: white;
-      border-radius: 20px;
-      padding: 32px 28px;
-      max-width: 680px;
-      width: 100%;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-    }
+.container {
+  background: white;
+  border-radius: 20px;
+  padding: 32px 28px;
+  max-width: 680px;
+  width: 100%;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+}
 
-    .progress {
-      font-size: 18px;
-      color: #64748b;
-      text-align: center;
-      margin-bottom: 16px;
-    }
+.progress {
+  font-size: 18px;
+  color: #64748b;
+  text-align: center;
+  margin-bottom: 16px;
+}
 
-    .sentence {
-      font-size: 28px;
-      line-height: 1.55;
-      text-align: center;
-      margin: 0 0 48px;
-      color: #1e293b;
-    }
+.sentence {
+  font-size: 28px;
+  line-height: 1.55;
+  text-align: center;
+  margin: 0 0 48px;
+  color: #1e293b;
+}
 
-    .blank {
-      display: inline-block;
-      min-width: 120px;
-      height: 54px;
-      margin: 0 8px;
-      vertical-align: middle;
-      border: 3px dashed #bfdbfe;
-      border-radius: 14px;
-      background: #f0f9ff;
-      transition: all 0.28s ease;
-    }
+.blank {
+  display: inline-block;
+  min-width: 120px;
+  height: 54px;
+  margin: 0 8px;
+  vertical-align: middle;
+  border: 3px dashed #bfdbfe;
+  border-radius: 14px;
+  background: #f0f9ff;
+  transition: all 0.28s ease;
+}
 
-    .blank.filled   { border-style: solid; border-color: #60a5fa; background: white; }
-    .blank.correct  { border-color: #22c55e; box-shadow: 0 0 0 5px #ecfccb; animation: pop 0.45s; }
-    .blank.incorrect{ border-color: #ef4444; box-shadow: 0 0 0 5px #fee2e2; animation: shake 0.5s; }
+.blank.filled   { border-style: solid; border-color: #60a5fa; background: white; }
+.blank.correct  { border-color: #22c55e; box-shadow: 0 0 0 5px #ecfccb; animation: pop 0.45s; }
+.blank.incorrect{ border-color: #ef4444; box-shadow: 0 0 0 5px #fee2e2; animation: shake 0.5s; }
 
-    .options {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      justify-content: center;
-      margin: 40px 0 30px;
-    }
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin: 40px 0 30px;
+}
 
-    .word {
-      font-size: 20px;
-      padding: 14px 28px;
-      border-radius: 999px;
-      background: #e5e7eb;
-      border: 2px solid #d1d5db;
-      cursor: grab;
-      user-select: none;
-      transition: all 0.2s;
-    }
+.word {
+  font-size: 20px;
+  padding: 14px 28px;
+  border-radius: 999px;
+  background: #e5e7eb;
+  border: 2px solid #d1d5db;
+  cursor: grab;
+  user-select: none;
+  transition: all 0.2s;
+}
 
-    .word:hover     { background: #d1d5db; transform: translateY(-3px); }
-    .word.dragging  { opacity: 0.8; transform: scale(1.08); cursor: grabbing; }
-    .word.used      { opacity: 0.4; pointer-events: none; }
+.word:hover     { background: #d1d5db; transform: translateY(-3px); }
+.word.dragging  { opacity: 0.8; transform: scale(1.08); cursor: grabbing; }
+.word.used      { opacity: 0.4; pointer-events: none; }
 
-    @keyframes pop  { 0% {transform:scale(0.9);} 50% {transform:scale(1.15);} 100% {transform:scale(1);} }
-    @keyframes shake{ 0%,100%{transform:translateX(0);} 20%,60%{transform:translateX(-10px);} 40%,80%{transform:translateX(10px);} }
+@keyframes pop  { 0% {transform:scale(0.9);} 50% {transform:scale(1.15);} 100% {transform:scale(1);} }
+@keyframes shake{ 0%,100%{transform:translateX(0);} 20%,60%{transform:translateX(-10px);} 40%,80%{transform:translateX(10px);} }
 
-    .feedback {
-      font-size: 24px;
-      font-weight: 600;
-      text-align: center;
-      margin: 24px 0;
-      min-height: 40px;
-    }
+.feedback {
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  margin: 24px 0;
+  min-height: 40px;
+}
 
-    .success { color: #15803d; }
-    .error   { color: #b91c1c; }
+.success { color: #15803d; }
+.error   { color: #b91c1c; }
 
-    button {
-      font-size: 20px;
-      padding: 14px 48px;
-      border: none;
-      border-radius: 12px;
-      background: #3b82f6;
-      color: white;
-      cursor: pointer;
-      display: block;
-      margin: 20px auto 0;
-    }
+button {
+  font-size: 20px;
+  padding: 14px 48px;
+  border: none;
+  border-radius: 12px;
+  background: #3b82f6;
+  color: white;
+  cursor: pointer;
+  display: block;
+  margin: 20px auto 0;
+}
 
-    button:hover { background: #2563eb; }
-    button:disabled { background: #9ca3af; cursor: not-allowed; }
+button:hover { background: #2563eb; }
+button:disabled { background: #9ca3af; cursor: not-allowed; }
 
-    #result {
-      text-align: center;
-      font-size: 28px;
-      margin-top: 40px;
-    }
-  </style>
-</head>
+#result {
+  text-align: center;
+  font-size: 28px;
+  margin-top: 40px;
+}
+
+#translation {
+  text-align: center;
+  font-size: 22px;
+  color: #4b5563;
+  margin-top: 20px;
+}  </style></head>
 <body>
 
 <div class="container" id="quizContainer">
@@ -122,34 +127,47 @@
   <div class="sentence" id="sentence"></div>
   <div class="options" id="options"></div>
   <div class="feedback" id="feedback"></div>
+  <div id="translation"></div>
   <button id="nextBtn" style="display:none;">Next →</button>
   <div id="result"></div>
 </div>
 
 <script>
 // ─── Quiz Data ────────────────────────────────────────────────
-const quizData = [
-  {
-    sentence: "They {have} been living here {since} 2018.",
-    blanks: ["have", "since"],
-    words: ["have", "has", "since", "for", "during"]
-  },
-  {
-    sentence: "She usually {goes} to the gym on {weekdays}.",
-    blanks: ["goes", "weekdays"],
-    words: ["goes", "stays", "weekdays", "weekends", "never"]
-  },
-  {
-    sentence: "My brother {wakes} up very early on {Saturdays}.",
-    blanks: ["wakes", "Saturdays"],
-    words: ["wakes", "sleeps", "Saturdays", "Mondays", "rarely"]
-  },
-  {
-    sentence: "We {will} visit the museum {next} week.",
-    blanks: ["will", "next"],
-    words: ["will", "would", "next", "last", "every"]
-  }
+const englishSentences = [
+  "They {have} been living here {since} 2018.",
+  "She usually {goes} to the gym on {weekdays}.",
+  "My brother {wakes} up very early on {Saturdays}.",
+  "We {will} visit the museum {next} week."
 ];
+
+const blanksList = [
+  ["have", "since"],
+  ["goes", "weekdays"],
+  ["wakes", "Saturdays"],
+  ["will", "next"]
+];
+
+const wordsList = [
+  ["have", "has", "since", "for", "during"],
+  ["goes", "stays", "weekdays", "weekends", "never"],
+  ["wakes", "sleeps", "Saturdays", "Mondays", "rarely"],
+  ["will", "would", "next", "last", "every"]
+];
+
+const russianTranslations = [
+  "Они живут здесь с 2018 года.",
+  "Она обычно ходит в спортзал по будням.",
+  "Мой брат просыпается очень рано по субботам.",
+  "Мы посетим музей на следующей неделе."
+];
+
+const quizData = englishSentences.map((sentence, i) => ({
+  sentence,
+  blanks: blanksList[i],
+  words: wordsList[i],
+  translation: russianTranslations[i]
+}));
 
 // ─── State ────────────────────────────────────────────────────
 let currentQuestion = 0;
@@ -161,6 +179,7 @@ const progressEl  = document.getElementById('progress');
 const sentenceEl  = document.getElementById('sentence');
 const optionsEl   = document.getElementById('options');
 const feedbackEl  = document.getElementById('feedback');
+const translationEl = document.getElementById('translation');
 const nextBtn     = document.getElementById('nextBtn');
 const resultEl    = document.getElementById('result');
 const container   = document.getElementById('quizContainer');
@@ -173,6 +192,7 @@ function loadQuestion() {
   sentenceEl.innerHTML = '';
   optionsEl.innerHTML = '';
   feedbackEl.textContent = '';
+  translationEl.textContent = '';
   nextBtn.style.display = 'none';
   resultEl.textContent = '';
 
@@ -269,8 +289,9 @@ function checkIfSentenceComplete() {
   const allCorrect = [...blanks].every(b => b.classList.contains('correct'));
 
   if (allFilled && allCorrect) {
-    feedbackEl.textContent = "Perfect! 🎉";
+    feedbackEl.textContent = "Perfect! ";
     feedbackEl.className = 'feedback success';
+    translationEl.textContent = quizData[currentQuestion].translation;
     nextBtn.style.display = 'block';
     score++;
   } else if (allFilled) {
@@ -300,3 +321,4 @@ loadQuestion();
 </script>
 </body>
 </html>
+
